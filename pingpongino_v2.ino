@@ -2,26 +2,26 @@
 #include <ESP8266WebServer.h>
 #include "./DNSServer.h"
 #include<EEPROM.h>
-/* Put your SSID & Password */
+
 const char* ssid = "Pingo Pongo";  // Enter SSID here
 const char* password = "12345678";  //Enter Password here
-int punti_fine;
-struct giocatore {
-  int punti = 0;
-  String nome;
-};
-struct giocatore giocV, giocR;
-bool is_partita = false;
-/* Put IP Address details */
 IPAddress local_ip(10, 10, 10, 1);
 IPAddress gateway(10, 10, 10, 1);
 IPAddress subnet(255, 0, 0, 0);
-
 ESP8266WebServer server(80);
-
 const byte        DNS_PORT = 53;          // Capture DNS requests on port 53
 DNSServer         dnsServer;              // Create the DNS object
 
+int n_punti=0, n_set = 3, set_corr = 1;
+bool is_partita = false;
+struct giocatore {
+  int punti = 0;
+  String nome=" ";
+  int set_vinti=0;
+};
+struct giocatore giocV, giocR;
+
+int mod = 0;
 #define pinV 13
 #define pinR 15
 #define pinA 12
@@ -51,6 +51,7 @@ void setup() {
 
   server.on("/", handle_index);
   server.on("/crea", handle_crea);
+  server.on("/partita", handle_partita);
   server.onNotFound(handle_NotFound);
 
   server.begin();
@@ -59,9 +60,30 @@ void setup() {
 void loop() {
   dnsServer.processNextRequest();
   server.handleClient();
-  controllaPulsanti();
-  Serial.print("punti verde: ");
-  Serial.print(giocV.punti);
-  Serial.print("punti rossi: ");
-  Serial.println(giocR.punti);
+  switch (mod) {
+    case 1:
+      controllaPulsanti();
+      vittoria();
+      Serial.print("\nset: ");
+      Serial.print(giocV.set_vinti);
+      Serial.print(" - ");
+      Serial.print(giocR.set_vinti);
+      Serial.print("      punti: ");
+      Serial.print(giocV.punti);
+      Serial.print(" - ");
+      Serial.print(giocR.punti);
+      break;
+    case 2:
+      Serial.println("FINE");
+      break;
+    default:
+      while (n_punti == 0) {
+        dnsServer.processNextRequest();
+        server.handleClient();
+        Serial.println("premi 'C' per continuare");
+
+      }
+      mod = 1;
+      break;
+  }
 }

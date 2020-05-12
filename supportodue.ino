@@ -11,13 +11,13 @@ String dammiCodice(char* variante) {
     HTML += "<form action = ' /crea'>";
 
     HTML += "<label for = 'f1'>Giocatore1: </label > <br>";
-    HTML += "<input type = 'text' id = 'f1' name = 'G1'><br><br>";
+    HTML += "<input type = 'text' id = 'GV' name = 'GV'><br><br>";
 
     HTML += "<label for = 'f2'>Giocatore2: </label > <br>";
-    HTML += "<input type = 'text' id = 'f1' name = 'G2'><br><br>";
+    HTML += "<input type = 'text' id = 'GR' name = 'GR'><br><br>";
 
     HTML += "<label for='punti'>Punti:</label><br>";
-    HTML += "<input type='text' id='punti' name='P' value=";
+    HTML += "<input type='text' id ='P' name='P' value=";
     HTML +=EEPROM.read(0);
     HTML+="><br><br>";
     
@@ -32,6 +32,24 @@ String dammiCodice(char* variante) {
      HTML+="</head><body></body></html>";
 
   }
+  if (variante == "partita") {
+    HTML="<!DOCTYPE html><html><head><meta http-equiv='refresh' content='10'><title>Partita - Pingo Pongo</title><style></style></head><body><div>punti: ";
+    HTML+= giocV.punti;
+    HTML+=" - ";
+    HTML+=giocR.punti;
+    HTML+="<br> set: ";
+    HTML+= giocV.set_vinti;
+    HTML+=" - ";
+    HTML+=giocR.set_vinti;
+        HTML+="<br> giocatori: ";
+    HTML+= giocV.nome;
+    HTML+=" - ";
+    HTML+=giocR.nome;
+    
+    HTML+="<br> punti: ";
+    HTML+= n_punti;
+    HTML+="</div></body></html>";
+  }
   return HTML;
 }
 
@@ -43,13 +61,21 @@ void handle_index() {
 void handle_crea() {
   server.send(200, "text/html", dammiCodice("crea"));
   Serial.println("crea");
-  giocV.nome = server.arg("G1");
-  giocR.nome = server.arg("G2");
-  EEPROM.write(0, server.arg("P").toFloat());
+  giocV.nome = server.arg("GV");
+  giocR.nome = server.arg("GR");
+  n_punti=server.arg("P").toFloat();
+  EEPROM.write(0, n_punti);
+  EEPROM.commit();
   Serial.println(giocV.nome);
   Serial.println(giocR.nome);
-  Serial.println(punti_fine);
+  Serial.println(n_punti);
 }
+
+void handle_partita(){
+  server.send(200, "text/html", dammiCodice("partita"));
+  
+}
+
 void handle_NotFound() {
 
   server.send(404, "text/plain", "Not found");
