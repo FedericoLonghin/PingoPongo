@@ -1,7 +1,7 @@
 #include <ESP8266WiFi.h>
 #include <ESP8266WebServer.h>
 //#include "./DNSServer.h"
-#include<EEPROM.h>
+
 
 const char* ssid = "Pingo Pongo";  // Enter SSID here
 const char* password = "12345678";  //Enter Password here
@@ -40,9 +40,9 @@ void setup() {
   pinMode(pinA, INPUT);
   pinMode(pinB, INPUT);
   pinMode(pinC, INPUT);
-
+  pinMode(D4, OUTPUT);
   Serial.begin(115200);
-  EEPROM.begin(512);
+
 
   WiFi.softAP(ssid, password);
   WiFi.softAPConfig(local_ip, gateway, subnet);
@@ -52,7 +52,8 @@ void setup() {
   server.on("/", handle_index);
   server.on("/conf", handle_conf);
   server.on("/dati", handle_dati);
-
+  server.on("/info", handle_info);
+    server.on("/cancella", handle_cancella);
   server.onNotFound(handle_NotFound);
 
   server.begin();
