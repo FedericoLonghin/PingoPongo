@@ -2,29 +2,29 @@ void controllaPulsanti() {
   if (digitalRead(pinV) == HIGH) {
     giocV.punti++;
     digitalWrite(D4, 1);
-    delay(100);
-    while (digitalRead(pinV) == HIGH) {}
+    delay(200);
+    //  while (digitalRead(pinV) == HIGH) {}
     digitalWrite(D4, 0);
   }
   if (digitalRead(pinR) == HIGH) {
     giocR.punti++;
     digitalWrite(D4, 1);
-    delay(100);
-    while (digitalRead(pinR) == HIGH) {}
+    delay(200);
+    //  while (digitalRead(pinR) == HIGH) {}
     digitalWrite(D4, 0);
   }
   if (digitalRead(pinA) == HIGH && giocV.punti > 0) {
     giocV.punti--;
     digitalWrite(D4, 1);
-    delay(100);
-    while (digitalRead(pinA) == HIGH) {}
+    delay(200);
+    //  while (digitalRead(pinA) == HIGH) {}
     digitalWrite(D4, 0);
   }
   if (digitalRead(pinB) == HIGH && giocR.punti > 0) {
     giocR.punti--;
     digitalWrite(D4, 1);
-    delay(100);
-    while (digitalRead(pinB) == HIGH) {}
+    delay(200);
+    //  while (digitalRead(pinB) == HIGH) {}
     digitalWrite(D4, 0);
   }
 }
@@ -48,15 +48,14 @@ void gestisciPunti() {
     giocR.punti = 0;
   }
 }
-bool vincitore() {
-  if (giocV.set_vinti > giocR.set_vinti)return 0;
-  else return 1;
-}
+
+ 
 
 
 void pulisci() {
+  Serial.println("puliscoio");
   n_punti = 0;
-  n_set = 0;
+  n_set_fine = 0;
   set_corr = 1;
   giocV.nome = " ";
   giocV.punti = 0;
@@ -65,5 +64,5 @@ void pulisci() {
   giocR.punti = 0;
   giocR.set_vinti = 0;
   is_partita = false;
-  autoref = false;
+//  autoref = false;
 }

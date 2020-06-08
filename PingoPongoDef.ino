@@ -1,4 +1,4 @@
-#include <ESP8266WiFi.h>
+    #include <ESP8266WiFi.h>
 #include <ESP8266WebServer.h>
 //#include "./DNSServer.h"
 
@@ -11,7 +11,7 @@ IPAddress subnet(255, 0, 0, 0);
 ESP8266WebServer server(80);
 
 
-int n_punti = 0, n_set = 0, set_corr = 1;
+int n_punti = 0, n_set_fine = 0, set_corr = 1;
 bool is_partita = false;
 bool autoref = false;
 struct giocatore {
@@ -52,7 +52,7 @@ void setup() {
   server.on("/", handle_index);
   server.on("/conf", handle_conf);
   server.on("/dati", handle_dati);
-  server.on("/info", handle_info);
+//  server.on("/info", handle_info);
     server.on("/cancella", handle_cancella);
   server.onNotFound(handle_NotFound);
 

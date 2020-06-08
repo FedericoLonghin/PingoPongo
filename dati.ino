@@ -1,5 +1,6 @@
 String pgDati() {
   String HTML = "<div class='d-none d-lg-block h-20'></div><div class=' p-2  bg-primary  rounded-pill '><h1 class='display-1'><strong>";
+  //HTML+="<script>beep();</script>";
   HTML += giocV.nome;
   HTML += " - ";
   HTML += giocR.nome;
